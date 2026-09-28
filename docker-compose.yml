@@ -1,0 +1,60 @@
+# Rent Tracker backend. Run everything locally with:  docker compose up --build
+# The React app talks to the gateway:   http://localhost:8080/api/...
+# Each service's API docs:              http://localhost:8080/api/<service>/docs
+
+x-env: &env
+  JWT_SECRET: ${JWT_SECRET:-dev-only-change-me-dev-only-change-me}
+  CORS_ORIGINS: http://localhost:5173,http://localhost:4173
+  # DynamoDB Local accepts any credentials; on AWS these come from the ECS task role instead
+  DYNAMODB_ENDPOINT: http://dynamodb:8000
+  AWS_REGION: us-east-1
+  AWS_ACCESS_KEY_ID: local
+  AWS_SECRET_ACCESS_KEY: local
+
+x-service: &service
+  restart: unless-stopped
+  depends_on: [dynamodb]
+
+services:
+  gateway:
+    image: nginx:1.27-alpine
+    ports: ["8080:8080"]
+    volumes: ["./backend/gateway/nginx.conf:/etc/nginx/conf.d/default.conf:ro"]
+    depends_on: [auth, properties, renters, payments, dashboard]
+    restart: unless-stopped
+
+  auth:
+    <<: *service
+    build: { context: ./backend, dockerfile: services/auth/Dockerfile }
+    environment: { <<: *env, TABLE_NAME: rent-users }
+
+  properties:
+    <<: *service
+    build: { context: ./backend, dockerfile: services/properties/Dockerfile }
+    environment: { <<: *env, TABLE_NAME: rent-properties }
+
+  renters:
+    <<: *service
+    build: { context: ./backend, dockerfile: services/renters/Dockerfile }
+    environment: { <<: *env, TABLE_NAME: rent-renters }
+
+  payments:
+    <<: *service
+    build: { context: ./backend, dockerfile: services/payments/Dockerfile }
+    environment: { <<: *env, TABLE_NAME: rent-payments }
+
+  dashboard:
+    build: { context: ./backend, dockerfile: services/dashboard/Dockerfile }
+    environment: *env
+    restart: unless-stopped
+
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data
+    user: root   # lets DynamoDB Local write to the named volume
+    ports: ["8000:8000"]   # optional: inspect data with the AWS CLI (see README)
+    volumes: ["dynamodb-data:/home/dynamodblocal/data"]
+    restart: unless-stopped
+
+volumes:
+  dynamodb-data:

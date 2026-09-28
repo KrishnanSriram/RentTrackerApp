@@ -1,0 +1,120 @@
+/*
+ * Rent Tracker — shared styles.
+ * All visual styling lives here as named component classes built with Tailwind's @apply.
+ * Components only reference these class names (e.g. "btn btn-primary", "card", "input"),
+ * so changing the look of the app means editing this one file.
+ */
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eef6ff;
+  --color-brand-100: #d9eaff;
+  --color-brand-500: #2f6fed;
+  --color-brand-600: #1f5ad6;
+  --color-brand-700: #1a48ab;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@layer base {
+  html { @apply bg-slate-50 text-slate-800 antialiased; }
+  body { @apply min-h-screen font-sans; }
+  h1 { @apply text-2xl font-semibold text-slate-900; }
+  h2 { @apply text-lg font-semibold text-slate-900; }
+  h3 { @apply text-base font-semibold text-slate-900; }
+}
+
+@layer components {
+  /* ---------- Layout ---------- */
+  .app-shell      { @apply min-h-screen flex flex-col; }
+  .navbar         { @apply bg-white border-b border-slate-200; }
+  .navbar-inner   { @apply mx-auto max-w-6xl px-4 py-2 min-h-14 flex flex-wrap items-center gap-x-6 gap-y-1; }
+  .navbar-brand   { @apply font-semibold text-brand-600 text-lg whitespace-nowrap; }
+  .navbar-links   { @apply flex items-center gap-1 order-last w-full sm:order-none sm:w-auto sm:flex-1; }
+  .nav-link       { @apply px-3 py-1.5 rounded-md text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900; }
+  .nav-link-active{ @apply bg-brand-50 text-brand-700 font-medium; }
+  .navbar-user    { @apply ml-auto flex items-center gap-3 text-sm text-slate-500; }
+  .page           { @apply mx-auto w-full max-w-6xl px-4 py-6 flex flex-col gap-6; }
+  .page-header    { @apply flex flex-wrap items-center justify-between gap-3; }
+  .page-subtitle  { @apply text-sm text-slate-500 mt-1; }
+  .section        { @apply flex flex-col gap-3; }
+  .section-header { @apply flex flex-wrap items-center justify-between gap-2; }
+  .grid-cards     { @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3; }
+  .grid-stats     { @apply grid gap-4 grid-cols-2 lg:grid-cols-4; }
+  .row            { @apply flex flex-wrap items-center gap-2; }
+  .muted          { @apply text-sm text-slate-500; }
+  .link           { @apply text-brand-600 hover:underline font-medium; }
+
+  /* ---------- Cards ---------- */
+  .card           { @apply bg-white rounded-xl border border-slate-200 shadow-sm; }
+  .card-body      { @apply p-5 flex flex-col gap-3; }
+  .card-link      { @apply block hover:border-brand-500 hover:shadow transition; }
+  .stat           { @apply bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-col gap-1; }
+  .stat-label     { @apply text-xs uppercase tracking-wide text-slate-500; }
+  .stat-value     { @apply text-2xl font-semibold text-slate-900 tabular-nums; }
+
+  /* ---------- Buttons ---------- */
+  .btn            { @apply whitespace-nowrap inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition
+                           disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-1; }
+  .btn-primary    { @apply bg-brand-600 text-white hover:bg-brand-700; }
+  .btn-secondary  { @apply bg-white text-slate-700 border border-slate-300 hover:bg-slate-50; }
+  .btn-danger     { @apply bg-red-600 text-white hover:bg-red-700; }
+  .btn-ghost      { @apply text-slate-600 hover:bg-slate-100; }
+  .btn-sm         { @apply px-2.5 py-1 text-xs; }
+  .btn-block      { @apply w-full; }
+
+  /* ---------- Forms ---------- */
+  .form           { @apply flex flex-col gap-4; }
+  .form-grid      { @apply grid gap-4 sm:grid-cols-2; }
+  .form-full      { @apply sm:col-span-2; }
+  .field          { @apply flex flex-col gap-1; }
+  .label          { @apply text-sm font-medium text-slate-700; }
+  .input          { @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+                           placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500; }
+  .input-inline   { @apply w-auto; } /* must come after .input */
+  .form-actions   { @apply flex justify-end gap-2 pt-2; }
+  .form-error     { @apply rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-3 py-2; }
+  .hint           { @apply text-xs text-slate-500; }
+
+  /* ---------- Tables ---------- */
+  .table-wrap     { @apply bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto; }
+  .table          { @apply w-full text-sm; }
+  .table th       { @apply text-left font-medium text-slate-500 bg-slate-50 px-4 py-2.5 border-b border-slate-200 whitespace-nowrap; }
+  .table td       { @apply px-4 py-3 border-b border-slate-100 align-middle; }
+  .table tr:last-child td { @apply border-b-0; }
+  .table td:first-child   { @apply min-w-48; }
+  .table .num     { @apply text-right tabular-nums; }
+  .table .actions { @apply text-right whitespace-nowrap; }
+
+  /* ---------- Badges ---------- */
+  .badge          { @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium; }
+  .badge-paid     { @apply bg-emerald-100 text-emerald-800; }
+  .badge-partial  { @apply bg-amber-100 text-amber-800; }
+  .badge-unpaid   { @apply bg-red-100 text-red-700; }
+  .badge-vacant   { @apply bg-slate-100 text-slate-600; }
+  .badge-primary  { @apply bg-brand-100 text-brand-700; }
+  .badge-secondary{ @apply bg-slate-100 text-slate-600; }
+
+  /* ---------- Progress bar ---------- */
+  .progress       { @apply h-2 w-full rounded-full bg-slate-100 overflow-hidden; }
+  .progress-bar   { @apply h-full rounded-full bg-emerald-500 transition-all; }
+  .progress-bar-partial { @apply bg-amber-500; }
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop { @apply fixed inset-0 z-40 bg-slate-900/40 flex items-center justify-center p-4; }
+  .modal          { @apply bg-white rounded-xl border border-slate-200 shadow-sm w-full max-w-lg max-h-[90vh] overflow-y-auto; }
+  .modal-header   { @apply flex items-center justify-between px-5 pt-5; }
+  .modal-body     { @apply p-5; }
+
+  /* ---------- Loading & errors ---------- */
+  .loading        { @apply py-10 text-center text-sm text-slate-500; }
+  .alert-error    { @apply rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 flex flex-wrap items-center justify-between gap-3; }
+
+  /* ---------- Empty state ---------- */
+  .empty          { @apply bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center flex flex-col items-center gap-3 text-slate-500; }
+
+  /* ---------- Auth ---------- */
+  .auth-page      { @apply min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-brand-50 to-slate-100; }
+  .auth-card      { @apply bg-white rounded-xl border border-slate-200 shadow-sm w-full max-w-sm p-8 flex flex-col gap-6; }
+  .auth-title     { @apply text-center; }
+  .auth-switch    { @apply text-center text-sm text-slate-500; }
+}
